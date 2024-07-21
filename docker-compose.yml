@@ -1,0 +1,33 @@
+services:
+  nginx-reverse-proxy:
+    image: nginx:latest
+    container_name: nginx-reverse-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-confs/snippets/:/etc/nginx/snippets/:ro
+      - ./nginx-confs/vhosts/:/etc/nginx/conf.d:ro
+      - ./letsencrypt:/etc/letsencrypt:ro
+      - ./logs/:/var/log/nginx/
+      - ./default-site/:/usr/share/nginx/html/default-site/
+#    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    networks:
+      - nginx-reverse-proxy
+#  certbot:
+#    image: certbot/certbot:latest
+#    container_name: certbot
+#    restart: unless-stopped
+#    volumes:
+#      - ./default-site/:/var/www/certbot/
+#      - ./letsencrypt/:/etc/letsencrypt/
+#    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+#    depends_on:
+#      - nginx-reverse-proxy
+#    networks:
+#      - nginx-reverse-proxy
+
+#networks:
+#  nginx-reverse-proxy:
+#    external: true
