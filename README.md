@@ -1,6 +1,21 @@
+# Setup
+1.
+```shell
 docker network create nginx-reverse-proxy
+```
+2. Configure vhosts based on examples in *./nginx-confs/vhosts/*
 
+# Add other containers to same proxy network
+```shell
 docker network connect nginx-reverse-proxy {CONTAINER_NAME}
+```
+Then add vhost configuration
+
+# Reloading nginx to apply new configuration
+Simply restart container or run
+```shell
+docker compose exec nginx-reverse-proxy nginx -s reload
+``` 
 
 
 0 0 */89 0 0 docker run --rm -it --name certbot -v
